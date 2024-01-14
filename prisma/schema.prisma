@@ -19,15 +19,20 @@ model User {
   createdAt DateTime @default(now()) 
   role String 
   team  Team[]
+  project Project[]
+  
 
 } 
 model Project {
   projectId String @id @default(uuid()) 
   projectName String 
+  projectManager String
   startedAt DateTime @default(now()) 
   finishedAt DateTime? 
   progress Int?
   team    Team[]
+  manager User? @relation(fields: [projectManager] , references: [userId])
+
 
 
 

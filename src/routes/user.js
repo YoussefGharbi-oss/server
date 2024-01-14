@@ -1,19 +1,14 @@
+const express = require("express");
+const { getAllusers, getUserById, updateUser, deleteUser } = require("../handlers/user");
+const router = express.Router();
 
-const express = require("express") 
-const router = express.Router() 
+//get all the Users
+//Crud of User
 
-//get all the Users  
-//Crud of User 
-router.get("/users" , async(req,res)=>{
-    console.log("jawk Bahy")
-    res.json({message : "hello"})
+router.get("/users",getAllusers )
 
-})
-//TODO : CRUD OF THE USER 
-router.get("/user/:id" , async(req,res)=>{})
-router.post("/user" , async(req,res)=>{})
-router.put("/user/:id" , async(req,res)=>{})
-router.delete("/user/:id" , async(req,res)=>{}) 
+router.get("/user/:id", getUserById)
+router.put("/user/:id", updateUser)
+router.delete("/user/:id", deleteUser)
 
-
-module.exports = router
+module.exports = router;
