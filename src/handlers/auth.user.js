@@ -1,4 +1,4 @@
-const prisma = require("../db") 
+const prisma = require("../services/db") 
 const {  hashpassword,createJWT, comparePassword } = require("../modules/auth")
 const {z} = require("zod") 
 const dataSchema = require("../validationShema/userValidate")

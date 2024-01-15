@@ -9,42 +9,48 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
 model User {
-  userId String @id @default(uuid()) 
-  username String @unique
-  first_name String 
-  last_name String 
-  email String @unique 
-  password String 
-  createdAt DateTime @default(now()) 
-  role String 
-  team  Team[]
-  project Project[]
-  
-
-} 
+  userId     String    @id @default(uuid())
+  username   String    @unique
+  first_name String
+  last_name  String
+  email      String    @unique
+  password   String
+  createdAt  DateTime  @default(now())
+  role       String
+  team       Team[]
+  project    Project[]
+}
+//TODO : change the relation to userName
 model Project {
-  projectId String @id @default(uuid()) 
-  projectName String 
+  projectId      String    @id @default(uuid())
+  projectName    String
   projectManager String
-  startedAt DateTime @default(now()) 
-  finishedAt DateTime? 
-  progress Int?
-  team    Team[]
-  manager User? @relation(fields: [projectManager] , references: [userId])
-
-
-
-
+  startedAt      DateTime  @default(now())
+  finishedAt     DateTime?
+  progress       Int?
+  manager        User?     @relation(fields: [projectManager], references: [userId])
+  team           Team[]
+  sprint         Sprint[]
 }
+
+model Sprint {
+  sprintId   String    @id @default(uuid())
+  SprintName String
+  startedAt  DateTime  @default(now())
+  finishedAt DateTime?
+  belongsTo  String
+  project    Project   @relation(fields: [belongsTo], references: [projectId])
+}
+
 model Team {
-  teamId String @id @default(uuid()) 
-  name String 
-  projectId String? 
+  teamId      String   @id @default(uuid())
+  name        String
+  projectId   String?
   teamManager String?
-  project Project? @relation(fields: [projectId] , references: [projectId]) 
-  manager User? @relation(fields: [teamManager] , references: [userId])
-
-
+  project     Project? @relation(fields: [projectId], references: [projectId])
+  manager     User?    @relation(fields: [teamManager], references: [userId])
 }
+
 //you can csutom type by using Enum 

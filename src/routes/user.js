@@ -5,7 +5,7 @@ const router = express.Router();
 //get all the Users
 //Crud of User
 
-router.get("/users",getAllusers )
+router.get("/users",getAllusers)
 
 router.get("/user/:id", getUserById)
 router.put("/user/:id", updateUser)

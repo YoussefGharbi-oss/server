@@ -1,13 +1,14 @@
 const express = require("express") 
+const { createNewTeam, getTeambyId, getAllTeams, updateTeam, deleteTeam } = require("../handlers/team")
 const router = express.Router() 
 
 
 
-router.get("/teams" , async(req,res)=>{res.json({message : "team mreegl "})})
-router.get("/team/:id" , async(req,res)=>{})
-router.post("/team" , async(req,res)=>{})
-router.put("/team/:id" , async(req,res)=>{})
-router.delete("/team/:id" , async(req,res)=>{})  
+router.get("/teams" ,getAllTeams )
+router.get("/team/:id" , getTeambyId)
+router.post("/team" , createNewTeam)
+router.put("/team/:id" , updateTeam)
+router.delete("/team/:id" , deleteTeam)  
 
 
 

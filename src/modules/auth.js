@@ -5,7 +5,7 @@ const  createJWT = (user) => {
     const token = jwt.sign({
         id:user.userID ,  
         username : user.username , 
-}, process.env.JWT_SECRET)
+}, process.env.JWT_SECRET , {expiresIn : "7h"})
   return token
 }
  

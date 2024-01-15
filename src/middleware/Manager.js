@@ -1,5 +1,5 @@
-const prisma = require("../db");
-const { project } = require("../db");
+const prisma = require("../services/db");
+const { project } = require("../services/db");
 const jwt = require("jsonwebtoken")
 
 

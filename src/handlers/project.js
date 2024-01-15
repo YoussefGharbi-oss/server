@@ -1,4 +1,4 @@
-const prisma = require("../db");
+const prisma = require("../services/db");
 const projectDataSchema = require("../validationShema/projectValidate");
 const jwt = require("jsonwebtoken")
 
