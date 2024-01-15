@@ -52,6 +52,6 @@ app.use('/api/' , cookiesJwt , sprint)
 
 
 
-app.listen(port,()=> {
+app.listen(port || 8000,()=> {
     console.log(`server listening on ${port}`)
 })

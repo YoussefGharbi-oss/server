@@ -3,8 +3,9 @@ const bcrypt = require("bcrypt")
 
 const  createJWT = (user) => {
     const token = jwt.sign({
-        id:user.userID ,  
+          
         username : user.username , 
+        role : user.role 
 }, process.env.JWT_SECRET , {expiresIn : "7h"})
   return token
 }
