@@ -2,6 +2,8 @@ const prisma = require("../services/db");
 const { hashpassword, createJWT, comparePassword } = require("../modules/auth");
 const { z } = require("zod");
 const dataSchema = require("../validationShema/userValidate");
+const jwt = require("jsonwebtoken");
+const path = require("path");
 
 const createNewUser = async (req, res) => {
   const ValidateData = await dataSchema.parseAsync(req.body);
@@ -17,8 +19,8 @@ const createNewUser = async (req, res) => {
     });
     if (!user) return res.status(400);
     //Create a new Token
-    const token = createJWT(user);
-    return res.cookie("token", token).status(200).json({ message: "user created Succesfully !!! " });
+
+    return res.status(200).json({ message: "user created Succesfully !!! " });
   } catch (e) {
     res.status(500).json({ error: e });
   }
@@ -42,16 +44,18 @@ const signIn = async (req, res) => {
       return 
     }
 
-    const token = createJWT(user);
-    res.cookie("token", token, {
-      path: "/",
-      httpOnly: true, 
-      secure : true ,   
-      maxAge: 1000 * 60 * 60 * 24,
-    });
+    const AccessToken = createJWT(user , "1h" , process.env.ACCESS_TOKEN_SECRET); 
+    const RefreshToken = createJWT(user , "24h" , process.env.REFRESH_TOKEN_SECRET) 
+    
+    
+    return res.cookie("Refreshtoken" , RefreshToken , {
+      httpOnly : true , 
+      secure : true , 
+      
+    }).status(200).json({ AccessToken: AccessToken , RefreshToken : RefreshToken  , user : user })
 
 
-    return res.status(200).json({ user });
+ 
   } catch (e) {
     res.status(401).json({ errors: e });
   }
@@ -64,9 +68,26 @@ const signout = async (req, res) => {
     return res.status(401).json({ error: e });
   }
 };
-
+const refreshAccess = async (req,res) => {
+  try{
+    const  {Refreshtoken} = req.cookies;
+    if (!Refreshtoken) {
+      return res.status(401).json({ error: "No token provided" });
+    }
+    const decodedToken = jwt.verify(Refreshtoken , process.env.REFRESH_TOKEN_SECRET )
+    if(!decodedToken) return res.status(400).json({error : "Bad Request !!! "}) 
+    const AccessToken = createJWT(decodedToken , "10s" , process.env.ACCESS_TOKEN_SECRET) 
+    return res.status(200).json({AccessToken : AccessToken})
+  
+  
+  }catch(e) {
+    console.error(e);
+    return res.status(401).json({error : e})
+  }
+}
 module.exports = {
   createNewUser,
   signIn,
   signout,
+  refreshAccess
 };

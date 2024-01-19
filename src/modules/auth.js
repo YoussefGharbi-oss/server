@@ -1,12 +1,12 @@
 const jwt = require("jsonwebtoken") 
 const bcrypt = require("bcrypt")
 
-const  createJWT = (user) => {
+const  createJWT = (user , expAt , secret) => {
     const token = jwt.sign({
           
         username : user.username , 
         role : user.role 
-}, process.env.JWT_SECRET , {expiresIn : "7h"})
+}, secret , {expiresIn : expAt})
   return token
 }
  

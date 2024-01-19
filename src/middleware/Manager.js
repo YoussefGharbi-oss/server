@@ -6,8 +6,9 @@ const jwt = require("jsonwebtoken")
 const VerifyManager = async (req,res,next ) => {
    
     try{
-        token = req.cookies['token']
-        const decodedToken = jwt.verify(token , process.env.JWT_SECRET)
+        token = req.headers['authorization'].split(' ')[1]
+        
+        const decodedToken = jwt.verify(token , process.env.ACCESS_TOKEN_SECRET)
         const user = await prisma.user.findUnique({
             where : {
                 username : decodedToken.username
@@ -15,7 +16,7 @@ const VerifyManager = async (req,res,next ) => {
             if(user.role !== 'isManager' ) return res.status(401).json({erros : "not authorized"}) 
 
     }catch(e){
-     res.status(500).json({errors : e})
+     return res.status(500).json({errors : e})
 
     }
    

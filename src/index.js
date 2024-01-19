@@ -2,7 +2,7 @@ const express = require("express")
 const cors = require("cors");
 const cookieParser = require('cookie-parser');
 const morgan = require("morgan")
-const cookiesJwt = require("./middleware/cookiesJwt.js");
+const cookiesJwt= require("./middleware/VerifyJwt.js");
 
 
 const auth = require("./routes/auth/auth.js")
@@ -38,15 +38,19 @@ app.use((err, req, res, next) => {
     logger.error(err.message);
     res.status(500).send();
   });
+
 //handle user authentification ! 
 app.use("/auth/" , auth)
-
+app.get("/" , async (req , res) => {
+  console.log(req.cookies.Refreshtoken)
+  res.send("cookies are setted")
+})
 //you can use nested middlewears by using Npm i compose-middlewear 
 //custom middlewears
-app.use('/api/',cookiesJwt, VerifyManager ,  user)
-app.use('/api/',VerifyManager, project )
-app.use('/api/' , cookiesJwt , team  )
-app.use('/api/' , cookiesJwt , sprint)
+app.use('/api/',cookiesJwt,  user)
+app.use('/api/', cookiesJwt, VerifyManager ,project )
+app.use('/api/' , cookiesJwt, team  )
+app.use('/api/' , cookiesJwt, sprint)
 
 
 
